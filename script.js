@@ -4,9 +4,7 @@ $(document).ready(function() {
 	var ifSignToday = myDate.getMonth()*30 + myDate.getDate();
 	if(getCookie("ifSignToday")!=ifSignToday) {
 		$.getJSON('https://www.zhanqi.tv/api/user/follow.listsbypage?page=1&nums=10', function(json){
-			// alert(JSON.stringify(json));
 			for(var i=0;i<json.data.list.length;i++){
-    			// roomId
     			$.ajax({ 
     				url: "https://www.zhanqi.tv/api/actives/signin/fans.sign", 
     				type: "post", 
@@ -15,6 +13,7 @@ $(document).ready(function() {
     			});
 		 	}
 		});
+		console.info("Sign in Complete.");
 		document.cookie = "ifSignToday="+ifSignToday; 
 	}
 	function getCookie(name){ 
@@ -26,4 +25,26 @@ $(document).ready(function() {
 		} 
 		return ""; 
 	} 
+	var timer_int=self.setInterval(function() {
+		$.getJSON('https://www.zhanqi.tv/api/user/task.get', function(json){
+			if(json.data.length!=0) {
+				for(var i=0;i<json.data.length;i++) {
+					var tmp = json.data[i].progress.current - json.data[i].progress.total;
+					console.info(json.data[i].name+":\t"+tmp);
+					if(tmp >=0) {
+						$.ajax({ 
+    						url: "https://www.zhanqi.tv/api/user/task.complete", 
+    						type: "post", 
+    						data: { taskId: json.data[i].id }, 
+    						contentType: "application/x-www-form-urlencoded; charset=utf-8" 
+    					});
+					}
+				}
+			}
+			else {
+				console.info("tasks Complete,Stop looping.");
+				self.clearInterval(timer_int);
+			}
+		});
+	},30000); 
 });
