@@ -1,0 +1,14 @@
+{
+    "manifest_version": 2,
+    "name": "Zhanqi TV SignIn",
+    "description": "打开战旗TV页面自动签到",
+    "version": "1.0",
+
+    "content_scripts": [{
+    	"matches": ["https://www.zhanqi.tv/*"],
+        "js": [
+        	"jquery-3.1.1.min.js",
+            "script.js"
+        ]
+    }]
+}
