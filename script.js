@@ -3,6 +3,12 @@ $(document).ready(function() {
 	var myDate = new Date();
 	var ifSignToday = myDate.getMonth()*30 + myDate.getDate();
 	if(getCookie("ifSignToday")!=ifSignToday) {
+		$.ajax({ 
+    		url: "https://www.zhanqi.tv/api/actives/chance/send.share", 
+    		type: "post", 
+    		data: { }, 
+    		contentType: "application/x-www-form-urlencoded; charset=utf-8" 
+    	});
 		$.getJSON('https://www.zhanqi.tv/api/user/follow.listsbypage?page=1&nums=10', function(json){
 			for(var i=0;i<json.data.list.length;i++){
     			$.ajax({ 
